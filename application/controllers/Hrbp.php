@@ -130,90 +130,151 @@ class Hrbp extends CI_Controller {
 	
 			if (empty($error)) {
 				$data = $this->upload->data();
-				//echo "<pre>";print_r($data);exit;
-				if (!empty($data['file_name'])) {
-					$import_xls_file = $data['file_name'];
-				} else {
-					$import_xls_file = 0;
-				}
-	
-				$file_name = $path . $import_xls_file;
-	
-				$reader = ReaderEntityFactory::createXLSXReader();
-				//$reader->disableDateAutoConversion();
-				$reader->setShouldFormatDates(true);
-	
-				$reader->open($file_name);
+                //echo "<pre>";print_r($data);exit;
+                if (!empty($data['file_name'])) {
+                    $import_xls_file = $data['file_name'];
+                } else {
+                    $import_xls_file = 0;
+                }
+   
+                $spreadsheet = new Spreadsheet();
+                $inputFileType = 'Xlsx';
+                $inputFileName = $path . $import_xls_file;
+   
+ 
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+                $worksheetData = $reader->listWorksheetInfo($inputFileName);
 
-			
-						$count = 1;
-			
-						$flag = true;
-						$i = 0;
-							/////// add file ////
-							$file_info['month'] 		= $month;
-							$file_info['doc_for'] 		= 'salary_input';
-							$file_info['created_by'] 	= $this->session->userdata('id');
-							$file_info['document']		= $data['file_name'];
-								
-							$lastid = $this->masters_model->insert_data('tbl_files', $file_info);
-						
-						
-						foreach ($reader->getSheetIterator() as $sheet) {
-							foreach ($sheet->getRowIterator() as $row) {
-								// do stuff with the row
-								if ($count > 1) {
-									$cells = $row->getCells();
-									
-									//$inserdata['file_name'] = $file_name;
-									$inserdata['employee_id'] = $cells[0]->getValue();
-									$inserdata['canteen_recovery'] = $cells[1]->getValue();
-									$inserdata['staff_sale_deductions'] = $cells[2]->getValue();
-									$inserdata['insurance_renewals'] = $cells[3]->getValue();
-									$inserdata['id_card_deduction'] = $cells[4]->getValue();
-									$inserdata['laptop_deduction'] = $cells[5]->getValue();
-									$inserdata['other_deduction'] = $cells[6]->getValue();
-									$inserdata['total_deduction'] = $cells[7]->getValue();
-									$inserdata['normal_overtime_hours'] = $cells[8]->getValue();
-									$inserdata['holiday_overtime_hours'] = $cells[9]->getValue();
-									$inserdata['lop_reversal'] = $cells[10]->getValue();
-									$inserdata['joining_bonus'] = $cells[11]->getValue();
-									$inserdata['incentive'] = $cells[12]->getValue();
-									$inserdata['incentive_remarks'] = $cells[13]->getValue();
-									$inserdata['ta_da'] = $cells[14]->getValue();
-									$inserdata['ta_da_remarks'] = $cells[15]->getValue();
-									$inserdata['retention_bonus'] = $cells[16]->getValue();
-									$inserdata['other_earnings'] = $cells[17]->getValue();
-									$inserdata['other_earnings_remarks'] = $cells[18]->getValue();
-									$inserdata['total_earnings'] = $cells[19]->getValue();
-									$inserdata['payroll_date'] =$month;
-									//$inserdata['date'] = $outlet_date;
-									//$inserdata['distributor'] = $distributor;
-									//$inserdata['sde'] = $sde_id;
-									$inserdata['created_by'] = $this->session->userdata('id');
-									//$data['createddate'] 	= date('Y-m-d H:i:s');
-									$this->masters_model->insert_data('payroll', $inserdata);
-			
+				$errorrecords = array();
+				$errorcount = 0;
+                
+				$allErrors = [];
+				$errorcount = 0;
+				
+				foreach ($worksheetData as $sheet) { 
+					$tot_row = $sheet['totalRows'];
+				
+					for ($x = 1; $x <= $tot_row; $x++) {
+						$spreadsheet = $reader->load($inputFileName);
+						$sheet = $spreadsheet->getActiveSheet();
+						$highestRow = $sheet->getHighestColumn();
+				
+						if ($x == 1) {
+							if ($highestRow != 'T') {
+								$this->session->set_flashdata('count_error', "Uploaded Excel is Not a Valid Format.");
+								redirect(base_url('index.php/hrbp/upload'));
+							}
+				
+							$emp_id = $sheet->getCell('A'.$x)->getFormattedValue();
+							$canteen_recovery = $sheet->getCell('B'.$x)->getFormattedValue();
+				
+							if ($emp_id != 'Employee ID' || $canteen_recovery != 'CANTEEN RECOVERY') {
+								$this->session->set_flashdata('count_error', "Uploaded Excel header not in valid format.");
+								redirect(base_url('index.php/hrbp/upload'));
+							}
+				
+							if ($tot_row == 1) {
+								$this->session->set_flashdata('count_error', "There is no data in the excel.");
+								redirect(base_url('index.php/hrbp/upload'));
+							}
+						} else {
+							// Data Extraction
+							$employee_id = str_replace('%', '', $sheet->getCell('A'.$x)->getFormattedValue());
+				
+							$inserdata = [
+								'payroll_date' => $month,
+						        'created_by' => $this->session->userdata('id'),
+								'employee_id' => $employee_id,
+								'canteen_recovery' => str_replace('%', '', $sheet->getCell('B'.$x)->getFormattedValue()),
+								'staff_sale_deductions' => str_replace('%', '', $sheet->getCell('C'.$x)->getFormattedValue()),
+								'insurance_renewals' => str_replace('%', '', $sheet->getCell('D'.$x)->getFormattedValue()),
+								'id_card_deduction' => str_replace('%', '', $sheet->getCell('E'.$x)->getFormattedValue()),
+								'laptop_deduction' => str_replace('%', '', $sheet->getCell('F'.$x)->getFormattedValue()),
+								'other_deduction' => str_replace('%', '', $sheet->getCell('G'.$x)->getFormattedValue()),
+								'total_deduction' => str_replace('%', '', $sheet->getCell('H'.$x)->getFormattedValue()),
+								'normal_overtime_hours' => str_replace('%', '', $sheet->getCell('I'.$x)->getFormattedValue()),
+								'holiday_overtime_hours' => str_replace('%', '', $sheet->getCell('J'.$x)->getFormattedValue()),
+								'lop_reversal' => str_replace('%', '', $sheet->getCell('K'.$x)->getFormattedValue()),
+								'joining_bonus' => str_replace('%', '', $sheet->getCell('L'.$x)->getFormattedValue()),
+								'incentive' => str_replace('%', '', $sheet->getCell('M'.$x)->getFormattedValue()),
+								'incentive_remarks' => str_replace('%', '', $sheet->getCell('N'.$x)->getFormattedValue()),
+								'ta_da' => str_replace('%', '', $sheet->getCell('O'.$x)->getFormattedValue()),
+								'ta_da_remarks' => str_replace('%', '', $sheet->getCell('P'.$x)->getFormattedValue()),
+								'retention_bonus' => str_replace('%', '', $sheet->getCell('Q'.$x)->getFormattedValue()),
+								'other_earnings' => str_replace('%', '', $sheet->getCell('R'.$x)->getFormattedValue()),
+								'other_earnings_remarks' => str_replace('%', '', $sheet->getCell('S'.$x)->getFormattedValue()),
+								'total_earnings' => str_replace('%', '', $sheet->getCell('T'.$x)->getFormattedValue())
+							];
+				
+							// Validation Rules
+							$rowErrors = [];
+				
+							if (empty($employee_id)) {
+								$rowErrors[] = "Employee ID should not be empty.";
+							}
+				
+							$numericFields = [
+								'canteen_recovery', 'staff_sale_deductions', 'insurance_renewals', 'id_card_deduction',
+								'laptop_deduction', 'other_deduction', 'total_deduction', 'normal_overtime_hours',
+								'holiday_overtime_hours', 'lop_reversal', 'joining_bonus', 'incentive', 'ta_da',
+								'retention_bonus', 'other_earnings', 'total_earnings'
+							];
+				
+							foreach ($numericFields as $field) {
+								if (!empty($inserdata[$field]) && !ctype_digit($inserdata[$field])) {
+									$rowErrors[] = ucfirst(str_replace('_', ' ', $field)) . " must be a number.";
 								}
-			
-								$count++;
+							}
+				
+							$textFields = ['incentive_remarks', 'ta_da_remarks', 'other_earnings_remarks'];
+							foreach ($textFields as $field) {
+								if (!empty($inserdata[$field]) && !preg_match('/^[a-zA-Z ]+$/', $inserdata[$field])) {
+									$rowErrors[] = ucfirst(str_replace('_', ' ', $field)) . " must be text.";
+								}
+							}
+				
+							// If errors exist, add them to the array
+							if (!empty($rowErrors)) {
+								$errorcount++;
+								$allErrors[] = ['employee_id' => $employee_id, 'errors' => implode('<br>', $rowErrors)];
+							} else {
+								$this->masters_model->insert_data('payroll', $inserdata);
 							}
 						}
+					}
+				}
+				
+				// If there are errors, display them in an HTML table
+				if ($errorcount > 0) {
+					$errorTable = "<h3>Validation Errors Found:</h3>";
+					$errorTable .= "<table border='1' cellpadding='5' cellspacing='0'>";
+					$errorTable .= "<tr><th>Employee ID</th><th>Errors</th></tr>";
+				
+					foreach ($allErrors as $error) {
+						$errorTable .= "<tr><td>{$error['employee_id']}</td><td>{$error['errors']}</td></tr>";
+					}
+				
+					$errorTable .= "</table>";
+					$this->session->set_flashdata('count_error', $errorTable);
+					redirect(base_url('index.php/hrbp/upload'));
+				}
+				
+				// If no errors, save the file info
+				if ($errorcount == 0) {
+					$file_info = [
+						'month' => $month,
+						'doc_for' => 'salary_input',
+						'created_by' => $this->session->userdata('id'),
+						'document' => $data['file_name']
+					];
+					$this->masters_model->insert_data('tbl_files', $file_info);
+				}
+				
 
 
-
-					
-
-				//////////////////
-				$reader->close();
+		
+		
 			}
-		} //end if
-
-
-
-		
-		
-		
 		
 	
 		echo "<hr />";
@@ -224,6 +285,7 @@ class Hrbp extends CI_Controller {
 		redirect(base_url('index.php/hrbp/upload'));
 	}
 
+		}	
 	
 	public function get_distributors_summary() {
 		$start_date = $this->input->post('start_date', TRUE);
@@ -485,7 +547,7 @@ class Hrbp extends CI_Controller {
         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
         <thead>
             <tr>
-                <th>#</th>
+                <th>Si.No</th>
                 <th>File Name</th>
                 <th>Download</th>
             
