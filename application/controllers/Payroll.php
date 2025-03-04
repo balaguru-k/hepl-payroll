@@ -220,6 +220,7 @@ class Payroll extends CI_Controller
 						<th>Other Earnings</th>
 						<th>Other Earnings Remarks</th>
 						<th>Total Earnings</th>
+						<th>Last Work Day</th>
 						<th>Created By</th>
 						<th>Payroll Date</th>
 						<th>Created At</th>
@@ -251,6 +252,7 @@ class Payroll extends CI_Controller
 										<td>' . $val['other_earnings'] . '</td>
 										<td>' . $val['other_earnings_remarks'] . '</td>
 										<td>' . $val['total_earnings'] . '</td>
+										<td>'.$val['last_work_day'].'</td>
 										<td>' . $username['username'] . '</td>
 										<td>' . $val['payroll_date'] . '</td>
 										<td>' . $val['created_at'] . '</td>										
@@ -293,7 +295,8 @@ class Payroll extends CI_Controller
 							<th>Retention Bonus</th>
 							<th>Other Earnings</th>
 							<th>Other Earnings Remarks</th>
-							<th>Total Earnings</th>														
+							<th>Total Earnings</th>	
+							<th>Last Work Day</th>												
 							<th>Created At</th>
 					</tr></thead><tbody>';
 
@@ -323,6 +326,7 @@ class Payroll extends CI_Controller
 								<td>' . $val['other_earnings'] . '</td>
 								<td>' . $val['other_earnings_remarks'] . '</td>
 								<td>' . $val['total_earnings'] . '</td>
+								<td>'.$val['last_work_day'].'</td>
 								<td>' . $val['created_at'] . '</td>										
 								</tr>';
 				}

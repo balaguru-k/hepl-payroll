@@ -160,7 +160,7 @@ class Hrbp extends CI_Controller {
 						$highestRow = $sheet->getHighestColumn();
 				
 						if ($x == 1) {
-							if ($highestRow != 'T') {
+							if ($highestRow != 'U') {
 								$this->session->set_flashdata('count_error', "Uploaded Excel is Not a Valid Format.");
 								redirect(base_url('index.php/hrbp/upload'));
 							}
@@ -180,7 +180,10 @@ class Hrbp extends CI_Controller {
 						} else {
 							// Data Extraction
 							$employee_id = str_replace('%', '', $sheet->getCell('A'.$x)->getFormattedValue());
-				
+							$lwd = $sheet->getCell('U'.$x)->getFormattedValue();
+							$last_work_day = date('Y-m-d',strtotime($lwd));
+							//print_r($last_work_day);exit;
+							
 							$inserdata = [
 								'payroll_date' => $month,
 						        'created_by' => $this->session->userdata('id'),
@@ -203,7 +206,10 @@ class Hrbp extends CI_Controller {
 								'retention_bonus' => str_replace('%', '', $sheet->getCell('Q'.$x)->getFormattedValue()),
 								'other_earnings' => str_replace('%', '', $sheet->getCell('R'.$x)->getFormattedValue()),
 								'other_earnings_remarks' => str_replace('%', '', $sheet->getCell('S'.$x)->getFormattedValue()),
-								'total_earnings' => str_replace('%', '', $sheet->getCell('T'.$x)->getFormattedValue())
+								'total_earnings' => str_replace('%', '', $sheet->getCell('T'.$x)->getFormattedValue()),
+								'last_work_day' => $last_work_day,
+							
+
 							];
 				
 							// Validation Rules
@@ -445,6 +451,7 @@ class Hrbp extends CI_Controller {
         $sheet->setCellValue('D1', 'Count');
 		$sheet->setCellValue('E1', 'Completed');
         $sheet->setCellValue('F1', 'Pending');  
+		// $sheet->setCellValue('G1', 'Last Work Day');
 		
 		$rows = 2;
         foreach ($distributors_list as $k=>$val){
@@ -480,6 +487,7 @@ class Hrbp extends CI_Controller {
 					$sheet->setCellValue('D' . $rows, $res_count['error_result_count']);
 					$sheet->setCellValue('E' . $rows, $completed_count['error_completed_count']);
 					$sheet->setCellValue('F' . $rows, $pending_count);
+					// $sheet->setCellValue('G' .$rows, $val['last_work_day']);
 				}else{
 					$sheet->setCellValue('C' . $rows, $err['result']);
 					$sheet->setCellValue('D' . $rows, $res_count['error_result_count']);
