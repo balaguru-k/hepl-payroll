@@ -32,7 +32,7 @@ if($_SERVER['HTTP_HOST'] == "localhost")
 {
     $config['base_url'] = 'http://localhost/hepl_payroll/';
 }else{ 
-    $config['base_url'] = 'https://dev.cavinkare.in/outlet_tracker/';
+    $config['base_url'] = 'https://dev.cavinkare.in/hepl_payroll/';
    // $config['base_url'] = 'https://magicportal.cavinkare.in/distributors/';
     // $config['base_url'] = 'https://dev.cavinkare.in/hr_payroll/';
    // $config['base_url'] = 'https://magicportal.cavinkare.in/QC/hr_payroll/';
