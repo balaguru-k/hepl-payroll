@@ -181,7 +181,9 @@ class Hrbp extends CI_Controller {
 							// Data Extraction
 							$employee_id = str_replace('%', '', $sheet->getCell('A'.$x)->getFormattedValue());
 							$lwd = $sheet->getCell('U'.$x)->getFormattedValue();
-							$last_work_day = date('Y-m-d',strtotime($lwd));
+							// Set last_work_day to null if empty, else format the date
+                            $last_work_day = !empty(trim($lwd)) ? date('Y-m-d', strtotime($lwd)) : null;
+							// $last_work_day = date('Y-m-d',strtotime($lwd));
 							//print_r($last_work_day);exit;
 							
 							$inserdata = [
