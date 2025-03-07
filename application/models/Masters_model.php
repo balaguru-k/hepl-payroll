@@ -54,7 +54,7 @@ class Masters_model extends CI_Model {
         $this->db->where($col, $id);
         $query = $this->db->get($table);
         $query->row_array();
-        //echo $this->db->last_query(); exit;
+        // echo $this->db->last_query(); exit;
         //return $query->row_array();
 
         return $query->result_array();
@@ -133,7 +133,7 @@ class Masters_model extends CI_Model {
         
         $this->db->select('id as id');
 		$query = $this->db->get($table);
-		//echo $this->db->last_query(); exit;
+		// echo $this->db->last_query(); exit;
 		$result = $query->row_array();
 		//$result = $result['id'];
 		if ($result) {
@@ -383,6 +383,26 @@ class Masters_model extends CI_Model {
         // print_r($query);
         return $query->row(); // Return single row object
     }
+
+    public function update_qc_status($id, $data) {
+        
+        $this->db->where('id', $id);
+        $this->db->set($data);
+        $this->db->update('payroll');
+        return $this->db->affected_rows() > 0;
+        // if ($this->db->affected_rows() > 0) {
+        //     return array("success" => true, "message" => "QC Status updated successfully.");
+        // } else {
+        //     return array("success" => false, "message" => "Failed to update QC Status.");
+        // }
+        // echo $this->db->last_query();
+        // return $this->db->affected_rows() > 0;
+    }
+
     
     
+
+
+
+
 }

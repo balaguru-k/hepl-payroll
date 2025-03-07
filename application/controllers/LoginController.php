@@ -54,22 +54,32 @@ class LoginController extends CI_Controller
 				$this->session->set_userdata('emp_id', $result['emp_id']);
 				$this->session->set_userdata('status', $result['status']);
 				$this->session->set_userdata('id', $result['id']);
-				if (($this->session->userdata('role') == 'PAYROLL') && ($this->session->userdata('status') == '4')) {
+
+				 if (($this->session->userdata('role') == 'QUALITY_CHECK') && ($this->session->userdata('status') == '5')) {
+					redirect(base_url('index.php/quality/quality_check'));
+				}
+				
+			      else if (($this->session->userdata('role') == 'PAYROLL') && ($this->session->userdata('status') == '4')) {
 					redirect(base_url('index.php/payroll/payroll_view'));
 				} else if (($this->session->userdata('role') == 'HRBP') && ($this->session->userdata('status') == '3')) {
 
 					redirect(base_url('index.php/hrbp/upload'));
 				}
-				else if (($this->session->userdata('role') == 'ADMIN') && ($this->session->userdata('status') == '1')) {
+				  else if (($this->session->userdata('role') == 'ADMIN') && ($this->session->userdata('status') == '1')) {
 
 					redirect(base_url('index.php/Admin/admin_view'));
-				} else {
+				}
+				// else if (($this->session->userdata('role') == 'QUALITY_CHECK') && ($this->session->userdata('status') == '5')) {
+				// 	redirect(base_url('index.php/quality/quality_check'));
+				// }
+				
+				  else {
 					$this->session->set_flashdata('message', ('You Are Not Allowed'));
 					redirect(base_url());
 				}
 
 
-			} else {
+			  }   else {
 				$this->session->set_flashdata('message', ('Username / Password Invalid'));
 				redirect(base_url());
 			}

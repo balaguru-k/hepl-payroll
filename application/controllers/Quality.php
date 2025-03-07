@@ -36,7 +36,7 @@ use PHPMailer\PHPMailer\Exception;*/
 //load phpmailer Library
 
 
-class Payroll extends CI_Controller
+class Quality extends CI_Controller
 {
 
 	/**
@@ -68,7 +68,8 @@ class Payroll extends CI_Controller
 		$data['session_data'] = $session_data;
 		if (!$this->session->userdata('logged_in')) {
 			redirect(base_url(), 'refresh');
-		} else if (($this->session->userdata('role') != "PAYROLL")) {
+		} else if (($this->session->userdata('role') != "QUALITY_CHECK")) {
+            log_message('debug', 'User role is not QUALITY_CHECK');
 			redirect(base_url(), 'refresh');
 		}
 	}
@@ -81,14 +82,14 @@ class Payroll extends CI_Controller
 		   $this->load->view('hrbp/upload', $data);
 	   }
 	*/
-	public function payroll_view()
+	public function quality_check()
 	{
 		//documents
 		$distributor         = $this->masters_model->get_table_row_condition('users', 'role', 'DISTRIBUTOR');
 		$data['distributor'] = $distributor;
 
 		// $this->load->view('hrbp/dashboard', $data);
-		$this->load->view('payroll/payroll_view', $data);
+		$this->load->view('quality/quality_check', $data);
 
 	}
 
@@ -191,6 +192,7 @@ class Payroll extends CI_Controller
 		// // Convert month to a format that can be used for filtering
 		$month = date('Y-m-01', strtotime($month));
 
+
 		// Filter documents based on the selected month
 		$documents1 = $this->masters_model->get_all_documents_by_month('payroll', $month, $hrbp_user_id);
 
@@ -199,6 +201,7 @@ class Payroll extends CI_Controller
 			style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 			<thead>
 				<tr><th>Si.No</th>
+				
 						<th>Employee ID</th>
 						<th>Canteen Recovery</th>
 						<th>Staff Sale Deductions</th>
@@ -225,14 +228,22 @@ class Payroll extends CI_Controller
 						<th>Created At</th>
 						<th>QC Status</th>
 						<th>QC Remarks</th>
+					
+						
+						
 				</tr></thead><tbody>';
+
+
+				
 
 				foreach ($documents1 as $k => $val) {
 
 					$a        = $a + 1;
 					$username = $this->masters_model->get_username('users', $val['created_by']);
 					$html .= '<tr>
+					 
 										<td>' . $a . '</td>
+										
 										<td>' . $val['employee_id'] . '</td>
 										<td>' . $val['canteen_recovery'] . '</td>
 										<td>' . $val['staff_sale_deductions'] . '</td>
@@ -257,14 +268,20 @@ class Payroll extends CI_Controller
 										<td>' . $username['username'] . '</td>
 										<td>' . $val['payroll_date'] . '</td>
 										<td>' . $val['created_at'] . '</td>	
-										<td>';
+									    <td>'; 
 										if ($val['qc_status'] != 1) {
-											$html .= '<span class="badge badge-soft-danger font-size-12">Not yet Verified</span>';
+											$html .= '<button class="btn btn-success verify-btn" data-id="' . $val['id'] . '">Verify</button>';
 										}else{
 											$html .= '<span class="badge badge-soft-success font-size-12">Verified</span>';
 										}
-										$html .= '</td>
-										<td>' . $val['qc_remarks'] . '</td>									
+                                        $html .= '</td> 
+										
+									
+								        <td id="qc_remarks_' . $val['id'] . '">' . $val['qc_remarks'] . '</td>
+
+									
+                                  
+
                 			 </tr>';
 				}
 
@@ -278,10 +295,47 @@ class Payroll extends CI_Controller
 
 
 			}
-		
+	
 
 
 	}
+
+	
+
+public function update_qc_status_check()
+{
+    // Load model
+
+    $id = $this->input->post('id');
+    $status = $this->input->post('status');
+    $remarks = $this->input->post('remarks');
+
+
+   
+    // Update the database
+    $update_data = array(
+        'qc_status' => $status,
+        'qc_remarks' => $remarks
+    );
+	//  // Debugging: Print SQL Query and Data
+	//  $this->db->where('id', $id);
+	//  $this->db->set($update_data);
+	//  $this->db->update('payroll');
+	
+
+    $result = $this->masters_model->update_qc_status($id, $update_data);
+	// echo $this->db->last_query();
+	// print_r($result);die;
+    if ($result) {
+        echo json_encode(['status' => true, 'message' => 'QC Status updated successfully!']);
+    } else {
+        echo json_encode(['status' => false, 'message' => 'Failed to update QC Status.']);
+    }
+}
+
+
+
+
 }
 ///
 
