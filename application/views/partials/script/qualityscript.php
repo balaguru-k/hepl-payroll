@@ -308,37 +308,6 @@
  
 
 
-// function updateQcStatus(status) {
-//     var id = $('#recordid').val();
-//     var remarks = $('#qc_remarks').val();
-
-//     $.ajax({
-//         url: "<?= base_url('quality/update_qc_status_check') ?>",
-//         type: "POST",
-//         data: { id: id, status: status, remarks: remarks },
-//         success: function (response) {
-//             response = JSON.parse(response);
-//             if (response.success) {
-//                 // Update the UI as needed
-//                 new_upload_month_list();
-//                 $('#qcRemarksModal').modal('hide');
-
-//                 // Show success message
-//                 $('#qcMessage').html('<div class="alert alert-success">QC status updated successfully.</div>').fadeIn().delay(3000).fadeOut();
-//             } else {
-//                 // Show success message in case of failure response
-//                 $('#qcMessage').html('<div class="alert alert-info">QC status and remarks updated.</div>').fadeIn().delay(3000).fadeOut();
-
-//                 new_upload_month_list();
-//                 $('#qcRemarksModal').modal('hide');
-//             }
-//         },
-//         error: function () {
-//             $('#qcMessage').html('<div class="alert alert-danger">AJAX request failed.</div>').fadeIn().delay(3000).fadeOut();
-//         }
-//     });
-// }
-
 function updateQcStatus(status) {
     var id = $('#recordid').val();
     var remarks = $('#qc_remarks').val();
@@ -350,36 +319,71 @@ function updateQcStatus(status) {
         success: function (response) {
             response = JSON.parse(response);
             if (response.success) {
-                // Refresh data and close modal
+                // Update the UI as needed
                 new_upload_month_list();
                 $('#qcRemarksModal').modal('hide');
 
-            } else {
-                // Refresh data and close modal
-                new_upload_month_list();
+     
+            }
+             else {
+                  new_upload_month_list();
                 $('#qcRemarksModal').modal('hide');
-
-                // Show success pop-up (even in else case)
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'QC Verified Successfully.',
-                    timer: 3000, 
-                    showConfirmButton: false
-                });
             }
         },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'AJAX request failed. Please try again.',
-                timer: 3000,
-                showConfirmButton: false
-            });
-        }
+        // error: function () {
+        //     $('#qcMessage').html('<div class="alert alert-danger">AJAX request failed.</div>').fadeIn().delay(3000).fadeOut();
+        // }
     });
 }
+
+// function updateQcStatus(status) {
+//     var id = $('#recordid').val();
+//     var remarks = $('#qc_remarks').val();
+
+//     $.ajax({
+//         url: "<?= base_url('quality/update_qc_status_check') ?>",
+//         type: "POST",
+//         data: { id: id, status: status, remarks: remarks },
+//         success: function (response) {
+//             response = JSON.parse(response);
+//             if (response.success) {
+//                 // Refresh data and close modal
+//                 new_upload_month_list();
+//                 $('#qcRemarksModal').modal('hide');
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Success!',
+//                     text: 'QC Verified Successfully.',
+//                     timer: 3000, 
+//                     showConfirmButton: false
+//                 });
+
+//             } else {
+//                 // Refresh data and close modal
+//                 new_upload_month_list();
+//                 $('#qcRemarksModal').modal('hide');
+
+//                 // Show success pop-up (even in else case)
+//                 Swal.fire({
+//                     icon: 'success',
+//                     title: 'Success!',
+//                     text: 'QC error.',
+//                     timer: 3000, 
+//                     showConfirmButton: false
+//                 });
+//             }
+//         },
+//         // error: function () {
+//         //     Swal.fire({
+//         //         icon: 'error',
+//         //         title: 'Error!',
+//         //         text: 'AJAX request failed. Please try again.',
+//         //         timer: 3000,
+//         //         showConfirmButton: false
+//         //     });
+//         // }
+//     });
+// }
 
 
 </script>
