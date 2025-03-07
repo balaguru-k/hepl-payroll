@@ -128,9 +128,20 @@
                             <h5 class="modal-title">Consortium report</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <!-- <div id="qcMessage"></div> -->
+                        <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                QC Verified Successfully
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 
                         <div class="modal-body">
+                             <div id="qcMessage"></div>
                             <div class="table-responsive" style="overflow:unset">
                                 <table class="" style="margin-left: 200px;">
 

@@ -272,7 +272,7 @@ class Quality extends CI_Controller
 										if ($val['qc_status'] != 1) {
 											$html .= '<button class="btn btn-success verify-btn" data-id="' . $val['id'] . '">Verify</button>';
 										}else{
-											$html .= '<span class="badge badge-soft-success font-size-12">Verified</span>';
+											$html .= '<span class="qc-status">Verified</span>';
 										}
                                         $html .= '</td> 
 										
@@ -317,19 +317,14 @@ public function update_qc_status_check()
         'qc_status' => $status,
         'qc_remarks' => $remarks
     );
-	//  // Debugging: Print SQL Query and Data
-	//  $this->db->where('id', $id);
-	//  $this->db->set($update_data);
-	//  $this->db->update('payroll');
-	
+
 
     $result = $this->masters_model->update_qc_status($id, $update_data);
-	// echo $this->db->last_query();
-	// print_r($result);die;
+	
     if ($result) {
-        echo json_encode(['status' => true, 'message' => 'QC Status updated successfully!']);
+        echo json_encode(['success' => true, 'message' => 'QC Status updated successfully!']);
     } else {
-        echo json_encode(['status' => false, 'message' => 'Failed to update QC Status.']);
+        echo json_encode(['success' => false, 'message' => 'Failed to update QC Status.']);
     }
 }
 

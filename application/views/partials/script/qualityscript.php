@@ -256,7 +256,14 @@
                 // $('#qc_status').val(status);
                 $('#qcRemarksModal').modal('show');
             });
-// 
+//             $(document).ready(function () {
+//     // Open Modal and Set Record ID
+//     $('.verify-btn').on('click', function () {
+//         var recordId = $(this).data('id');
+//         $('#recordid').val(recordId); // Set hidden input value
+//         $('#qcRemarksModal').modal('show'); // Show the modal
+//     });
+// });
           
             $(document).ready(function () {
     // Close button action - Reset fields and close modal
@@ -292,11 +299,54 @@
 //     //     updateQcStatus(0); // Set QC status to 0
 //     // });
 
+// function updateQcStatus(id, status, remarks) {
+//         $.ajax({
+//             url: '<?php echo base_url('quality/update_qc_status_check'); ?>',
+//             type: "POST",
+//             data: { 
+//             id: id, 
+//             status: status,
+//              remarks: remarks 
+//             },
+//             // print_r(recordid); die;
+//             dataType: "json",
+//             success: function (response) {
+//                 if (response.success) {
+//                     alert(response.message); // Show success message
+//                     $("#qcRemarksModal").modal("hide"); // Close modal
+
+//                     // Dynamically update the button text in the table
+//                     let button = $(".verify-btn[data-id='" + id + "']");
+//                     button.text(status)
+//                         .removeClass("btn-success btn-danger")
+//                         .addClass(status === "Verified" ? "btn-success" : "btn-danger");
+
+
+//                                  // Update the QC status and remarks in the table
+//                                  $("#qc_status_" + id).text(status);
+//                         $("#qc_remarks_" + id).text(remarks);
+
+//                     // If using DataTables, reload to reflect changes
+//                     if ($.fn.DataTable.isDataTable("#new_upload_table")) {
+//                         $("#new_upload_table").DataTable().ajax.reload(null, false);
+//                     }
+//                 } else {
+//                     alert("Error: " + response.message);
+//                 }
+//             },
+//             error: function () {
+//                 alert("Error updating QC status.");
+//             }
+//         });
+//     }
 
 
 
- // Handle Verified Button Click
+//  // Handle Verified Button Click
  $('#verifyQcStatus').on('click', function () {
+    var id = $('#recordid').val();
+            var status = 'Verified';
+            var remarks = $('#qc_remarks').val();
         updateQcStatus(1); // Set QC status to 1
     });
 
@@ -305,83 +355,97 @@
         updateQcStatus(0); // Set QC status to 0
     });
 
- 
+    // Function to Update QC Status via AJAX
+    function updateQcStatus(status) {
+        var id = $('#recordid').val();
+        var remarks = $('#qc_remarks').val();
 
-
-function updateQcStatus(status) {
-    var id = $('#recordid').val();
-    var remarks = $('#qc_remarks').val();
-
-    $.ajax({
-        url: "<?= base_url('quality/update_qc_status_check') ?>",
-        type: "POST",
-        data: { id: id, status: status, remarks: remarks },
-        success: function (response) {
-            response = JSON.parse(response);
-            if (response.success) {
-                // Update the UI as needed
-                new_upload_month_list();
+        $.ajax({
+            url: "<?= base_url('quality/update_qc_status_check') ?>",
+       
+            type: "POST",                                                                                       
+            data: { 
+                id: id,
+                status: status,
+                remarks: remarks },
+            success: function (response) {
+                response = JSON.parse(response);
+                if (response.success) {
+                    var successToast = new bootstrap.Toast(document.getElementById('successToast'));
+                    successToast.show();
+                    // alert("QC Verified Successfully");
+                    new_upload_month_list();
+                
+                // Close the modal
                 $('#qcRemarksModal').modal('hide');
 
-     
+                }
+                else {
+                alert("Failed to update QC status.");
             }
-             else {
-                  new_upload_month_list();
-                $('#qcRemarksModal').modal('hide');
+               
+            },
+            error: function () {
+                alert("AJAX request failed.");
             }
-        },
-        // error: function () {
-        //     $('#qcMessage').html('<div class="alert alert-danger">AJAX request failed.</div>').fadeIn().delay(3000).fadeOut();
-        // }
-    });
-}
+        });
+    }
 
-// function updateQcStatus(status) {
+
+
+
+
+// function updateQcStatus1(status) {
 //     var id = $('#recordid').val();
 //     var remarks = $('#qc_remarks').val();
 
 //     $.ajax({
 //         url: "<?= base_url('quality/update_qc_status_check') ?>",
-//         type: "POST",
-//         data: { id: id, status: status, remarks: remarks },
+//         type: "POST",                                                                                       
+//         data: { 
+//             id: id,
+//             status: status,
+//             remarks: remarks 
+//         },
 //         success: function (response) {
 //             response = JSON.parse(response);
 //             if (response.success) {
-//                 // Refresh data and close modal
-//                 new_upload_month_list();
-//                 $('#qcRemarksModal').modal('hide');
+//                 // Show SweetAlert2 toast notification
 //                 Swal.fire({
+//                     toast: true,
+//                     position: 'top-end',
 //                     icon: 'success',
-//                     title: 'Success!',
-//                     text: 'QC Verified Successfully.',
-//                     timer: 3000, 
-//                     showConfirmButton: false
+//                     title: 'QC Verified Successfully',
+//                     showConfirmButton: false,
+//                     timer: 2000
 //                 });
 
-//             } else {
-//                 // Refresh data and close modal
+//                 // Refresh the data
 //                 new_upload_month_list();
+                
+//                 // Close the modal
 //                 $('#qcRemarksModal').modal('hide');
-
-//                 // Show success pop-up (even in else case)
+//             } else {
 //                 Swal.fire({
-//                     icon: 'success',
-//                     title: 'Success!',
-//                     text: 'QC error.',
-//                     timer: 3000, 
-//                     showConfirmButton: false
+//                     toast: true,
+//                     position: 'top-end',
+//                     icon: 'error',
+//                     title: 'Failed to update QC status',
+//                     showConfirmButton: false,
+//                     timer: 2000
 //                 });
 //             }
 //         },
-//         // error: function () {
-//         //     Swal.fire({
-//         //         icon: 'error',
-//         //         title: 'Error!',
-//         //         text: 'AJAX request failed. Please try again.',
-//         //         timer: 3000,
-//         //         showConfirmButton: false
-//         //     });
-//         // }
+//         error: function () {
+//             Swal.fire({
+//                 toast: true,
+//                 position: 'top-end',
+//                 icon: 'error',
+//                 title: 'AJAX request failed',
+//                 showConfirmButton: false,
+//                 timer: 2000
+//             });
+//         }
 //     });
 // }
 
