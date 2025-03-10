@@ -172,4 +172,21 @@
             }
         });
     }
+
+
+    $(document).ready(function () {
+    $('#month_filter_hrbp').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
+
+$(document).ready(function () {
+    $('#month').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
 </script>
