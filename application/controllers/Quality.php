@@ -153,6 +153,7 @@ class Quality extends CI_Controller
 					<th>Si.No</th>
 					<th>File Name</th>
 					<th>Download</th>
+					<th>Created by</th>
 					<th>Created Date</th>
 				</tr>
 			</thead>
@@ -166,7 +167,7 @@ class Quality extends CI_Controller
 				<td>' . $k . '</td>
 				<td title="' . $val['document'] . '">' . substr($val['document'], 0, 35) . '</td>
 				<td><a href="' . base_url('uploads/hrbp_doc/' . $this->session->userdata('id') . '/' . $val['document']) . '"  class="btn btn-success waves-effect waves-light">Download</a></td>
-				
+			    <td>' . $username['username'] . '</td>
 				<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
 				</tr>';
 				}
@@ -224,8 +225,7 @@ class Quality extends CI_Controller
 						<th>Total Earnings</th>
 						<th>Last Work Day</th>
 						<th>Created By</th>
-						<th>Payroll Date</th>
-						<th>Created At</th>
+					    <th>Created At</th>
 						<th>QC Status</th>
 						<th>QC Remarks</th>
 					
@@ -264,25 +264,18 @@ class Quality extends CI_Controller
 										<td>' . $val['other_earnings'] . '</td>
 										<td>' . $val['other_earnings_remarks'] . '</td>
 										<td>' . $val['total_earnings'] . '</td>
-										<td>'.$val['last_work_day'].'</td>
+										<td>' . date("d-m-Y", strtotime($val['last_work_day'])) . '</td>
 										<td>' . $username['username'] . '</td>
-										<td>' . $val['payroll_date'] . '</td>
-										<td>' . $val['created_at'] . '</td>	
-									    <td>'; 
+										<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
+								        <td>'; 
 										if ($val['qc_status'] != 1) {
 											$html .= '<button class="btn btn-success verify-btn" data-id="' . $val['id'] . '">Verify</button>';
 										}else{
-											$html .= '<span class="qc-status">Verified</span>';
+											$html .= '<span class="badge badge-soft-success font-size-12">Verified</span>';
 										}
                                         $html .= '</td> 
-										
-									
-								        <td id="qc_remarks_' . $val['id'] . '">' . $val['qc_remarks'] . '</td>
-
-									
-                                  
-
-                			 </tr>';
+										<td id="qc_remarks_' . $val['id'] . '">' . $val['qc_remarks'] . '</td>
+                                        </tr>';
 				}
 
 				$html .= '</tbody>
@@ -292,13 +285,8 @@ class Quality extends CI_Controller
 			} else {
 				$html = '<tr><td colspan="6" align="center">No Records found</td></tr>';
 				echo $html;
-
-
-			}
-	
-
-
-	}
+                 }
+        }
 
 	
 
@@ -331,6 +319,7 @@ public function update_qc_status_check()
 
 
 
+
 }
-///
+
 

@@ -560,7 +560,7 @@ class Hrbp extends CI_Controller {
                 <th>Si.No</th>
                 <th>File Name</th>
                 <th>Download</th>
-            
+                <th>Created by</th>
                 <th>Created Date</th>
             </tr>
         </thead>
@@ -574,7 +574,8 @@ class Hrbp extends CI_Controller {
             <td>' . $k . '</td>
             <td title="' . $val['document'] . '">' . substr($val['document'], 0, 35) . '</td>
             <td><a href="' . base_url('uploads/hrbp_doc/' . $this->session->userdata('id') . '/' . $val['document']) . '"  class="btn btn-success waves-effect waves-light">Download</a></td>
-            <td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
+            <td>' . $username['username'] . '</td>
+			<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
             </tr>';
         }
         $html .= '</tbody>

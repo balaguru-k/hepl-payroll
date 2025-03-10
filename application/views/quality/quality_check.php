@@ -53,6 +53,44 @@
         background-color: #6524b8 !important;
         border-color: #6a2cbb;
     }
+
+
+
+
+     #qcRemarksModal .modal-content {
+    border: 2px solid rgb(244, 244, 248); /* Change color as needed */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(14, 7, 7, 0.2); /* Adds a slight shadow */
+     }
+
+#qcRemarksModal .modal-header {
+    background-color:#6f42c1; /* Header background color */
+    color: white; /* Text color */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#qcRemarksModal .modal-footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#qcRemarksModal .modal-body {
+    padding: 15px;
+    font-size: 16px;
+} */
+
+#closeModel {
+    background-color: #6c757d; /* Bootstrap secondary color */
+    color:  #6a2cbb; /* White text */
+   }
+
+#closeModel:hover {
+    background-color:rgb(158, 162, 165); /* Darker shade on hover */
+}
+
+
+
 </style>
 <!-- DataTables -->
 <link href="<?php echo asset_url(); ?>libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet"
@@ -119,6 +157,31 @@
     <!-- ============================================================== -->
     <div class="main-content">
         <div class="page-content">
+
+
+             <!-- Modal for QC Remarks -->
+                <div class="modal fade" id="qcRemarksModal" tabindex="-1" role="dialog" aria-labelledby="qcRemarksModalLabel" style="z-index:99999999999999999999999; background:rgba(0, 0, 0, 0.4)";>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="qcRemarksModalLabel" style="color:white;">Enter QC Remarks (if any)</h5>
+                                <button type="button" id="closeModel" data-bs-dismiss="modal">X</button>
+                             </div>
+                            <div class="modal-body">
+                                <textarea id="qc_remarks" class="form-control" rows="4"></textarea>
+                                <input type="hidden" id="recordid">
+                        
+                                <!-- <input type="hidden" id="qc_status"> -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeQcModal">Close</button>
+                        
+                                <button type="button" class="btn btn-success" id="verifyQcStatus">Verified</button>
+                                <!-- <button type="button" class="btn btn-danger" id="notVerifyQcStatus">Not Verified</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <!--ADD users modal-->
             <div class="modal fade" id="add_bulk_employee_modal" tabindex="-1" role="dialog"
                 aria-labelledby="myModalLabel" aria-hidden="true">
@@ -129,15 +192,15 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body">
-                QC Verified Successfully
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
+                            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="polite" aria-atomic="true">
+                                <div class="d-flex">
+                                    <div class="toast-body">
+                                        QC Verified Successfully
+                                    </div>
+                                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
 
 
                         <div class="modal-body">
@@ -256,31 +319,7 @@
                                     data-bs-toggle="modal" data-bs-target="#add_bulk_employee_modal">consolidated table
                                     view</button>
                             </div>
-     <!-- Modal for QC Remarks -->
-     <div class="modal fade" id="qcRemarksModal" tabindex="-1" role="dialog" aria-labelledby="qcRemarksModalLabel" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qcRemarksModalLabel">Enter QC Remarks</h5>
-                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button> -->
-                </div>
-                <div class="modal-body">
-                    <textarea id="qc_remarks" class="form-control" rows="4"></textarea>
-                    <input type="hidden" id="recordid">
-                      <!-- <input type="hidden" id="employee_id"> -->
-                    <!-- <input type="hidden" id="qc_status"> -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeQcModal">Close</button>
-                    <!-- <button type="button" class="btn btn-primary" id="saveQcRemarks">Save</button> -->
-                    <button type="button" class="btn btn-success" id="verifyQcStatus">Verified</button>
-                    <!-- <button type="button" class="btn btn-danger" id="notVerifyQcStatus">Not Verified</button> -->
-                </div>
-            </div>
-        </div>
-    </div>
+    
                         </div>
                         <div class="card-body">
                             <div class="card-body" id="other_upload_month"></div>

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
     <meta charset="utf-8" />
-    <title>Outlet tracker Login</title>
+    <title>HEPL PAYROLL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Outlet tracker Login" name="Outlet" />
     <meta content="Outlet tracker Login" name="author" />
@@ -65,7 +65,7 @@
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
                                 <h5 class="text-white font-size-20">Welcome Back !</h5>
-                                <p class="text-white-50 mb-0">Sign in to continue to Outlet Tracker.</p>
+                                <p class="text-white-50 mb-0">Sign in to continue to Hepl Payroll.</p>
                                 <a href="/" class="logo logo-admin mt-4">
                                     <img src="assets/images/logo-sm-dark.png" alt="logo-sm-dark" height="30">
                                 </a>

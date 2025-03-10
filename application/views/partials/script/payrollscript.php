@@ -246,4 +246,22 @@
             }
         });
     }
+
+
+    $(document).ready(function () {
+    $('#month_out').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
+
+
+$(document).ready(function () {
+    $('#month_payroll_model').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
 </script>

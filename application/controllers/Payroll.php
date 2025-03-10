@@ -152,6 +152,7 @@ class Payroll extends CI_Controller
 					<th>Si.No</th>
 					<th>File Name</th>
 					<th>Download</th>
+					<th>Created by</th>
 					<th>Created Date</th>
 				</tr>
 			</thead>
@@ -165,7 +166,7 @@ class Payroll extends CI_Controller
 				<td>' . $k . '</td>
 				<td title="' . $val['document'] . '">' . substr($val['document'], 0, 35) . '</td>
 				<td><a href="' . base_url('uploads/hrbp_doc/' . $this->session->userdata('id') . '/' . $val['document']) . '"  class="btn btn-success waves-effect waves-light">Download</a></td>
-				
+				<td>' . $username['username'] . '</td>
 				<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
 				</tr>';
 				}
@@ -221,7 +222,7 @@ class Payroll extends CI_Controller
 						<th>Total Earnings</th>
 						<th>Last Work Day</th>
 						<th>Created By</th>
-						<th>Payroll Date</th>
+				
 						<th>Created At</th>
 						<th>QC Status</th>
 						<th>QC Remarks</th>
@@ -253,10 +254,10 @@ class Payroll extends CI_Controller
 										<td>' . $val['other_earnings'] . '</td>
 										<td>' . $val['other_earnings_remarks'] . '</td>
 										<td>' . $val['total_earnings'] . '</td>
-										<td>'.$val['last_work_day'].'</td>
+										<td>' . date("d-m-Y", strtotime($val['last_work_day'])) . '</td>
 										<td>' . $username['username'] . '</td>
-										<td>' . $val['payroll_date'] . '</td>
-										<td>' . $val['created_at'] . '</td>	
+									
+										<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
 										<td>';
 										if ($val['qc_status'] != 1) {
 											$html .= '<span class="badge badge-soft-danger font-size-12">Not yet Verified</span>';

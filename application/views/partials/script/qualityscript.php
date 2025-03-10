@@ -256,16 +256,8 @@
                 // $('#qc_status').val(status);
                 $('#qcRemarksModal').modal('show');
             });
-//             $(document).ready(function () {
-//     // Open Modal and Set Record ID
-//     $('.verify-btn').on('click', function () {
-//         var recordId = $(this).data('id');
-//         $('#recordid').val(recordId); // Set hidden input value
-//         $('#qcRemarksModal').modal('show'); // Show the modal
-//     });
-// });
-          
-            $(document).ready(function () {
+   
+    $(document).ready(function () {
     // Close button action - Reset fields and close modal
     $("#closeQcModal").click(function () {
         $("#qc_remarks").val(""); // Clear remarks field
@@ -273,76 +265,9 @@
         $("#qc_status").val(""); // Reset status field if needed
         $("#qcRemarksModal").modal("hide"); // Close the modal
     });
-            });
+    });
 
-    //         $('#verifyQcStatus').on('click', function () {
-    //     updateQcStatus(1); // Set QC status to 1
-    // });
-  
-// $('#verifyQcStatus').on('click', function() {
-//             var id = $('#recordid').val();
-//             var status = 'Verified';
-//             var remarks = $('#qc_remarks').val();
-//             updateQcStatus(id, status, remarks);
-//             // updateQcStatus( status, remarks);
-//         });
-
-//         $('#notVerifyQcStatus').on('click', function() {
-//             var id = $('#recordid').val();
-//             var status = 'Not Verified';
-//             var remarks = $('#qc_remarks').val();
-//             updateQcStatus(id, status, remarks);
-//             // updateQcStatus( status, remarks);
-//         });
-//     // Handle Not Verified Button Click
-//     // $('#notVerifyQcStatus').on('click', function () {
-//     //     updateQcStatus(0); // Set QC status to 0
-//     // });
-
-// function updateQcStatus(id, status, remarks) {
-//         $.ajax({
-//             url: '<?php echo base_url('quality/update_qc_status_check'); ?>',
-//             type: "POST",
-//             data: { 
-//             id: id, 
-//             status: status,
-//              remarks: remarks 
-//             },
-//             // print_r(recordid); die;
-//             dataType: "json",
-//             success: function (response) {
-//                 if (response.success) {
-//                     alert(response.message); // Show success message
-//                     $("#qcRemarksModal").modal("hide"); // Close modal
-
-//                     // Dynamically update the button text in the table
-//                     let button = $(".verify-btn[data-id='" + id + "']");
-//                     button.text(status)
-//                         .removeClass("btn-success btn-danger")
-//                         .addClass(status === "Verified" ? "btn-success" : "btn-danger");
-
-
-//                                  // Update the QC status and remarks in the table
-//                                  $("#qc_status_" + id).text(status);
-//                         $("#qc_remarks_" + id).text(remarks);
-
-//                     // If using DataTables, reload to reflect changes
-//                     if ($.fn.DataTable.isDataTable("#new_upload_table")) {
-//                         $("#new_upload_table").DataTable().ajax.reload(null, false);
-//                     }
-//                 } else {
-//                     alert("Error: " + response.message);
-//                 }
-//             },
-//             error: function () {
-//                 alert("Error updating QC status.");
-//             }
-//         });
-//     }
-
-
-
-//  // Handle Verified Button Click
+  //  // Handle Verified Button Click
  $('#verifyQcStatus').on('click', function () {
     var id = $('#recordid').val();
             var status = 'Verified';
@@ -350,104 +275,65 @@
         updateQcStatus(1); // Set QC status to 1
     });
 
-    // Handle Not Verified Button Click
-    $('#notVerifyQcStatus').on('click', function () {
-        updateQcStatus(0); // Set QC status to 0
-    });
+   
 
     // Function to Update QC Status via AJAX
     function updateQcStatus(status) {
         var id = $('#recordid').val();
         var remarks = $('#qc_remarks').val();
-
+        var ajax_url = '<?php echo base_url(); ?>';
         $.ajax({
-            url: "<?= base_url('quality/update_qc_status_check') ?>",
-       
+            // url: "<?= base_url('index.php/quality/update_qc_status_check') ?>",
+            url: ajax_url + 'index.php/quality/update_qc_status_check',
             type: "POST",                                                                                       
             data: { 
                 id: id,
                 status: status,
-                remarks: remarks },
-            success: function (response) {
-                response = JSON.parse(response);
-                if (response.success) {
+                remarks: remarks
+             },
+             dataType: "json", 
+                success: function (response) {
+                    if (response.success) {
                     var successToast = new bootstrap.Toast(document.getElementById('successToast'));
                     successToast.show();
-                    // alert("QC Verified Successfully");
                     new_upload_month_list();
-                
-                // Close the modal
-                $('#qcRemarksModal').modal('hide');
+                    $('#qcRemarksModal').modal('hide');
 
                 }
-                else {
-                alert("Failed to update QC status.");
+         
+            else {
+                alert(response.message || "Failed to update QC status.");
             }
                
             },
-            error: function () {
-                alert("AJAX request failed.");
-            }
+            error: function (xhr, status, error) {
+            console.error("AJAX Error:", status, error);
+            request_failed();
+            // alert("An error occurred while updating QC status.");
+        }
         });
     }
 
 
+$('#closeModal').on('click', function() {
+    $('#qcRemarksModal').modal('hide');
+    });
 
 
-
-// function updateQcStatus1(status) {
-//     var id = $('#recordid').val();
-//     var remarks = $('#qc_remarks').val();
-
-//     $.ajax({
-//         url: "<?= base_url('quality/update_qc_status_check') ?>",
-//         type: "POST",                                                                                       
-//         data: { 
-//             id: id,
-//             status: status,
-//             remarks: remarks 
-//         },
-//         success: function (response) {
-//             response = JSON.parse(response);
-//             if (response.success) {
-//                 // Show SweetAlert2 toast notification
-//                 Swal.fire({
-//                     toast: true,
-//                     position: 'top-end',
-//                     icon: 'success',
-//                     title: 'QC Verified Successfully',
-//                     showConfirmButton: false,
-//                     timer: 2000
-//                 });
-
-//                 // Refresh the data
-//                 new_upload_month_list();
-                
-//                 // Close the modal
-//                 $('#qcRemarksModal').modal('hide');
-//             } else {
-//                 Swal.fire({
-//                     toast: true,
-//                     position: 'top-end',
-//                     icon: 'error',
-//                     title: 'Failed to update QC status',
-//                     showConfirmButton: false,
-//                     timer: 2000
-//                 });
-//             }
-//         },
-//         error: function () {
-//             Swal.fire({
-//                 toast: true,
-//                 position: 'top-end',
-//                 icon: 'error',
-//                 title: 'AJAX request failed',
-//                 showConfirmButton: false,
-//                 timer: 2000
-//             });
-//         }
-//     });
-// }
+    $(document).ready(function () {
+    $('#month_out').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
 
 
+$(document).ready(function () {
+    $('#month_payroll_model').datepicker({
+        format: "MM yyyy",
+        minViewMode: 1,
+        autoclose: true
+    });
+});
 </script>

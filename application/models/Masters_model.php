@@ -390,18 +390,11 @@ class Masters_model extends CI_Model {
         $this->db->set($data);
         $this->db->update('payroll');
         return $this->db->affected_rows() > 0;
-        // if ($this->db->affected_rows() > 0) {
-        //     return array("success" => true, "message" => "QC Status updated successfully.");
-        // } else {
-        //     return array("success" => false, "message" => "Failed to update QC Status.");
-        // }
-        // echo $this->db->last_query();
-        // return $this->db->affected_rows() > 0;
+  
     }
 
     
-    
-
+  
 
 
 
