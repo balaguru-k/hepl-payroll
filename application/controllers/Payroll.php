@@ -211,6 +211,7 @@ class Payroll extends CI_Controller
 						<th>Normal Overtime Hours</th>
 						<th>Holiday Overtime Hours, Double Wages</th>
 						<th>LOP Reversal</th>
+						<th>LOP Reversal Month</th>
 						<th>Joining Bonus</th>
 						<th>Incentive</th>
 						<th>Incentive Remarks</th>
@@ -224,8 +225,6 @@ class Payroll extends CI_Controller
 						<th>Created By</th>
 				
 						<th>Created At</th>
-						<th>QC Status</th>
-						<th>QC Remarks</th>
 				</tr></thead><tbody>';
 
 				foreach ($documents1 as $k => $val) {
@@ -245,6 +244,7 @@ class Payroll extends CI_Controller
 										<td>' . $val['normal_overtime_hours'] . '</td>
 										<td>' . $val['holiday_overtime_hours'] . '</td>
 										<td>' . $val['lop_reversal'] . '</td>
+										<td>' . $val['lop_reversal_month'] . '</td>
 										<td>' . $val['joining_bonus'] . '</td>
 										<td>' . $val['incentive'] . '</td>
 										<td>' . $val['incentive_remarks'] . '</td>
@@ -258,14 +258,7 @@ class Payroll extends CI_Controller
 										<td>' . $username['username'] . '</td>
 									
 										<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
-										<td>';
-										if ($val['qc_status'] != 1) {
-											$html .= '<span class="badge badge-soft-danger font-size-12">Not yet Verified</span>';
-										}else{
-											$html .= '<span class="badge badge-soft-success font-size-12">Verified</span>';
-										}
-										$html .= '</td>
-										<td>' . $val['qc_remarks'] . '</td>									
+													
                 			 </tr>';
 				}
 

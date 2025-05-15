@@ -89,6 +89,27 @@
     background-color:rgb(158, 162, 165); /* Darker shade on hover */
 }
 
+    #new_upload_tabledata{
+        .dataTables_scrollHead{
+            display: none;
+        }
+        .dataTables_scrollBody{
+            #new_upload_table{
+                thead{
+                    tr{
+                        height: 100% !important;
+                        th{
+                            padding:10px !important;
+                        }
+                        div{
+                            height: 100% !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
 </style>

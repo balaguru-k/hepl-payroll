@@ -53,6 +53,27 @@
         background-color: #6524b8 !important;
         border-color: #6a2cbb;
     }
+    #new_upload_tabledata{
+        .dataTables_scrollHead{
+            display: none;
+        }
+        .dataTables_scrollBody{
+            #new_upload_table{
+                thead{
+                    tr{
+                        height: 100% !important;
+                        th{
+                            padding:10px !important;
+                        }
+                        div{
+                            height: 100% !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 </style>
 <!-- DataTables -->
 <link href="<?php echo asset_url(); ?>libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet"
@@ -188,6 +209,7 @@
                                             </div>
                                     </tr>
                                 </table>
+
                                 <div class="card-body" id="new_upload_tabledata"> </div>
                             </div>
                         </div>
