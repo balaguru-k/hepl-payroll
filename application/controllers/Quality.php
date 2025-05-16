@@ -238,9 +238,11 @@ class Quality extends CI_Controller
 				foreach ($documents1 as $k => $val) {
 
 					$a        = $a + 1;
+					$lwd = $val['last_work_day']? date("d-m-Y", strtotime($val['last_work_day'])) : '';
 					$username = $this->masters_model->get_username('users', $val['created_by']);
 					$html .= '<tr>
 					 
+		
 										<td>' . $a . '</td>
 										
 										<td>' . $val['employee_id'] . '</td>
@@ -264,7 +266,7 @@ class Quality extends CI_Controller
 										<td>' . $val['other_earnings'] . '</td>
 										<td>' . $val['other_earnings_remarks'] . '</td>
 										<td>' . $val['total_earnings'] . '</td>
-										<td>' . date("d-m-Y", strtotime($val['last_work_day'])) . '</td>
+										<td>' . $lwd . '</td>
 										<td>' . $username['username'] . '</td>
 										<td>' . date("d-m-Y h:i:s a", strtotime($val['created_at'])) . '</td>
                                         </tr>';
