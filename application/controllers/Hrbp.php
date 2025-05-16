@@ -200,9 +200,9 @@ class Hrbp extends CI_Controller {
             // Validation Rules
             $rowErrors = [];
 
-            if (empty($employee_id)) {
+           /*  if (empty($employee_id)) {
                 $rowErrors[] = "Employee ID should not be empty.";
-            }
+            } */
 
             $numericFields = [
                 'canteen_recovery', 'staff_sale_deductions', 'insurance_renewals', 'id_card_deduction',
@@ -228,7 +228,10 @@ class Hrbp extends CI_Controller {
                 $errorcount++;
                 $allErrors[] = ['employee_id' => $employee_id, 'errors' => implode('<br>', $rowErrors)];
             } else {
-                $this->masters_model->insert_data('payroll', $inserdata);
+                if($employee_id != ""){
+                  $this->masters_model->insert_data('payroll', $inserdata);
+                }
+                
             }
         }
 
