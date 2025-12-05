@@ -181,8 +181,7 @@
                                                                             </div>                                  
                                                                         </td>
                                                                         <td class="col-4" style="text-align:right; padding:20px 0;">
-                                                                            <a href="<?php echo base_url(); ?>uploads/sample/sample_inputs_excel.xlsx" class="btn btn-success waves-effect waves-light">Sample Excel</a>
-                                                                        </td>                                                                    
+                                                                            <a href="javascript:void(0)" onclick="downloadBlob('sample_inputs_excel.xlsx')" class="btn btn-success waves-effect waves-light">Sample Excel</a>                                                                        </td>                                                                    
                                                                     </tr>
                                                                     </table>  
                                                                   </div>

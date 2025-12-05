@@ -558,7 +558,30 @@ class Hrbp extends CI_Controller {
     }
 }
 
-
+ public function get_sample_blob($filename) {
+        if (!$this->session->userdata('id')) {
+            echo json_encode(['success' => false, 'error' => 'Unauthorized']);
+            return;
+        }
+       
+        $filename = basename($filename);
+        $allowed_extensions = ['xlsx', 'xls', 'csv', 'pdf'];
+        $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+       
+        if (!in_array($file_extension, $allowed_extensions)) {
+            echo json_encode(['success' => false, 'error' => 'File type not allowed']);
+            return;
+        }
+       
+        $file_path = FCPATH . 'uploads/sample/' . $filename;
+       
+        if (file_exists($file_path)) {
+            $data = base64_encode(file_get_contents($file_path));
+            echo json_encode(['success' => true, 'data' => $data, 'filename' => $filename]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'File not found']);
+        }
+    }
 
 
 

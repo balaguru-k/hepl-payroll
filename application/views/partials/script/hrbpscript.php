@@ -189,4 +189,26 @@ $(document).ready(function () {
         autoclose: true
     });
 });
+
+function downloadBlob(filename) {
+    fetch('<?php echo base_url("index.php/hrbp/get_sample_blob/"); ?>' + filename)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const blob = new Blob([Uint8Array.from(atob(data.data), c => c.charCodeAt(0))]);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = data.filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        } else {
+            alert('Sample file not found');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error downloading sample file');
+    });
+}
 </script>
