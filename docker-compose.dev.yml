@@ -5,7 +5,7 @@ services:
     image: hepl-payroll:latest
     container_name: hepl-payroll-dev
     ports:
-      - "8080:80"
+      - "8081:80"
     environment:
       CI_ENVIRONMENT: development
       DATABASE_HOST: host.docker.internal
