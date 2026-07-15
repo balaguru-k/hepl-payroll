@@ -30,7 +30,7 @@ date_default_timezone_set('Asia/Kolkata');
 //print($_SERVER['HTTP_HOST']);exit;
 if($_SERVER['HTTP_HOST'] == "localhost")
 {
-    $config['base_url'] = 'http://localhost/hepl_payroll/';
+    $config['base_url'] = 'http://localhost:8000';
 }else{ 
     $config['base_url'] = 'https://dev.cavinkare.in/hepl_payroll/';
    // $config['base_url'] = 'https://magicportal.cavinkare.in/distributors/';
