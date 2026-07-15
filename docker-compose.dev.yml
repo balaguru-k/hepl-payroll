@@ -2,24 +2,20 @@ version: '3.8'
 
 services:
   web:
-    image: docker.io/yourusername/hepl-payroll:latest
+    image: hepl-payroll:latest
     container_name: hepl-payroll-dev
     ports:
       - "8080:80"
     environment:
-      - CI_ENVIRONMENT=development
-      - DATABASE_HOST=db
-      - DATABASE_NAME=hepl_payroll_dev
-      - DATABASE_USER=payroll_user
-      - DATABASE_PASSWORD=payroll_pass
+      CI_ENVIRONMENT: development
+      DATABASE_HOST: host.docker.internal
+      DATABASE_NAME: hepl_payroll
+      DATABASE_USER: root
+      DATABASE_PASSWORD: your_mysql_password
     volumes:
       - .:/var/www/html
       - ./application/logs:/var/www/html/application/logs
       - ./uploads:/var/www/html/uploads
-    depends_on:
-      - db
-    networks:
-      - payroll-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
@@ -27,40 +23,14 @@ services:
       timeout: 10s
       retries: 3
 
-  db:
-    image: mysql:5.7
-    container_name: hepl-payroll-db-dev
-    environment:
-      - MYSQL_ROOT_PASSWORD=root_password
-      - MYSQL_DATABASE=hepl_payroll_dev
-      - MYSQL_USER=payroll_user
-      - MYSQL_PASSWORD=payroll_pass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data_dev:/var/lib/mysql
-    networks:
-      - payroll-network
-    restart: unless-stopped
-
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: hepl-payroll-phpmyadmin
-    environment:
-      - PMA_HOST=db
-      - PMA_USER=payroll_user
-      - PMA_PASSWORD=payroll_pass
     ports:
       - "8888:80"
-    depends_on:
-      - db
-    networks:
-      - payroll-network
+    environment:
+      PMA_HOST: host.docker.internal
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: your_mysql_password
     restart: unless-stopped
-
-volumes:
-  mysql_data_dev:
-
-networks:
-  payroll-network:
-    driver: bridge
