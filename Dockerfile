@@ -45,8 +45,6 @@ RUN mkdir -p application/logs application/cache uploads && \
 # Expose Apache port
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -55,4 +53,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && docker-php-ext-install mysqli pdo pdo_mysql zip
 
+# 2. Add the proper diagnostic probe step at the bottom
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1
 CMD ["apache2-foreground"]
