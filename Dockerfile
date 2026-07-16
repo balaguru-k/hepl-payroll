@@ -32,11 +32,6 @@ COPY . .
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies (only if composer.json exists)
-RUN if [ -f composer.json ]; then \
-        composer install --no-dev --optimize-autoloader; \
-    fi
-
 # Create writable directories
 RUN mkdir -p application/logs application/cache uploads && \
     chown -R www-data:www-data /var/www/html && \
