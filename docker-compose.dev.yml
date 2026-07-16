@@ -14,8 +14,6 @@ services:
       DATABASE_PASSWORD: bala@2701
     volumes:
       - .:/var/www/html
-      - ./application/logs:/var/www/html/application/logs
-      - ./uploads:/var/www/html/uploads
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
