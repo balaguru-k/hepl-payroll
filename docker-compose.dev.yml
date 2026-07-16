@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # 1. Your PHP Web Application Setup
+  # 1. PHP Web Application (Frontend/Backend inside the container)
   web:
     build: .
     ports:
@@ -9,31 +9,19 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      - DB_HOST=db
+      # 🔌 CRITICAL CHANGE: Tells Docker to connect to your local Windows MySQL instance
+      - DB_HOST=host.docker.internal
       - DB_USER=root
       - DB_PASSWORD=bala@2701
       - DB_NAME=hepl_payroll
-    depends_on:
-      - db
 
-  # 2. Your MySQL/MariaDB Database Configuration
-  db:
-    image: mysql:8.0 # or mariadb
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: bala@2701
-      MYSQL_DATABASE: hepl_payroll
-
-  # 3. Your phpMyAdmin Dashboard UI
+  # 2. phpMyAdmin UI (Optional - connects to your external Windows DB)
   phpmyadmin:
     image: phpmyadmin:latest
     ports:
       - "8888:80"
     environment:
-      # CRITICAL FIX: Tell phpMyAdmin to point to the 'db' container name, NOT localhost
-      PMA_HOST: db
+      # 🔌 Connects phpMyAdmin to your Windows host DB as well
+      PMA_HOST: host.docker.internal
       PMA_USER: root
-      PMA_PASSWORD: bala@2701
-    depends_on:
-      - db
+      PMA_PASSWORD=bala@2701
