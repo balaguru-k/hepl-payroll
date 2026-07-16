@@ -75,12 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => 'bala@2701',
-	'database' => 'hr_payroll',
-	//'database' => 'dev_hr_payroll',
-	'database' => 'outlet_tracker',	
+	'hostname' => getenv('DB_HOST') ? getenv('DB_HOST') : 'host.docker.internal', // 🔌 Force TCP connection
+	'username' => getenv('DB_USER') ? getenv('DB_USER') : 'root',
+	'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : 'bala@2701',
+	'database' => getenv('DB_NAME') ? getenv('DB_NAME') : 'hepl_payroll',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
