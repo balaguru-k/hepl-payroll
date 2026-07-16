@@ -11,7 +11,7 @@ services:
       DATABASE_HOST: host.docker.internal
       DATABASE_NAME: hepl_payroll
       DATABASE_USER: root
-      DATABASE_PASSWORD: your_mysql_password
+      DATABASE_PASSWORD: bala@2701
     volumes:
       - .:/var/www/html
       - ./application/logs:/var/www/html/application/logs
