@@ -6,22 +6,18 @@ services:
     build: .
     ports:
       - "8081:80"
-    volumes:
-      - .:/var/www/html
     environment:
-      # 🔌 CRITICAL CHANGE: Tells Docker to connect to your local Windows MySQL instance
       - DB_HOST=host.docker.internal
       - DB_USER=root
       - DB_PASSWORD=bala@2701
       - DB_NAME=hepl_payroll
 
-  # 2. phpMyAdmin UI (Optional - connects to your external Windows DB)
+  # 2. phpMyAdmin UI (Connects to your external Windows DB)
   phpmyadmin:
     image: phpmyadmin:latest
     ports:
       - "8888:80"
     environment:
-      # 🔌 Connects phpMyAdmin to your Windows host DB as well
       PMA_HOST: host.docker.internal
       PMA_USER: root
       PMA_PASSWORD: bala@2701
