@@ -24,4 +24,4 @@ services:
       # 🔌 Connects phpMyAdmin to your Windows host DB as well
       PMA_HOST: host.docker.internal
       PMA_USER: root
-      PMA_PASSWORD=bala@2701
+      PMA_PASSWORD: bala@2701
