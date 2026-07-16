@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache rewrite
 RUN a2enmod rewrite
 
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
 # Set working directory
 WORKDIR /var/www/html
 
@@ -45,6 +47,12 @@ EXPOSE 80
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-CMD curl -f http://localhost/ || exit 1
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    unzip \
+    zip \
+    libzip-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip
 
 CMD ["apache2-foreground"]
